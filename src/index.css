@@ -1,0 +1,120 @@
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+h2{
+  color: white;
+  text-align: center;
+}
+
+#root, #__next {
+  isolation: isolate;
+}
+h1 {
+  background-color: rgb(102, 112, 112);
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+.content-box {
+  display: flex;
+  gap:1rem;
+}
+aside{
+  background-color: rgb(213, 233, 233);
+  flex-grow: 1;
+  height:100dvh;
+  padding: 0.2rem;
+}
+main {
+  flex-grow: 15;
+  height:100dvh;
+  background-color: beige;
+}
+form {
+  flex:1;
+  max-width: 100%;
+  border:2px solid rgb(187, 170, 97);
+  line-height: 1.5;
+  background-color: rgb(113, 113, 179);
+}
+label {
+  color: white;
+  font-weight: 800;
+  max-width: 10rem;
+}
+.inputField {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem;
+}
+input {
+  max-width: 20rem;
+  border-radius: 5px;
+  color:rgb(0, 0, 0);
+  font-weight: 400;
+  height: 1.5rem;
+  background-color: #f0f0f0;
+  color: #333333;
+  border: 1px solid #4CAF50;
+  padding: 0.5rem;  
+}
+input:focus {
+  background-color: #e0ffe0;
+  border-color: #66bb6a;
+  outline: none;
+}
+.btn{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0.4rem;
+}
+.btns{
+display: flex;
+justify-content: space-between;
+margin-right: 0.4rem;
+
+}
+section {
+  text-align: center;
+}
+
+p{
+  color: white;
+  font-weight: 300;
+}
+ul {
+  list-style-type: none;
+}
+h4, li{
+  color: white;
+}

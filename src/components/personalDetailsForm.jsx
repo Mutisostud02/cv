@@ -1,19 +1,58 @@
 import Input from "./input"
 import Button from "./button"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function PersonalDetailsForm() {
+export default function PersonalDetailsForm({
+    fullName,
+    email,
+    phoneNumber,
+    onUpdate
+}) {
     const [showForm, setShowForm] = useState(true)
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [telNumber, setTelNumber] = useState('');
+    const [name, setName] = useState(fullName);
+    const [userEmail, setEmail] = useState(email);
+    const [telNumber, setTelNumber] = useState(phoneNumber);
 
+    useEffect(() => {
+        setName(fullName),
+        setEmail(email)
+        setTelNumber(phoneNumber)
+    }, [fullName, email, phoneNumber])
 
+    // function handleClick(e) {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     setShowForm(false)
+    //     onUpdate({
+    //         fullName:name,
+    //         email: userEmail,
+    //         phoneNumber: telNumber,
 
-    function handleClick(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        setShowForm(false)
+    //     })
+    // }
+    function handleNameChange(e) {
+        setName(e.target.value)
+        onUpdate({
+            fullName: e.target.value,
+            email,
+            phoneNumber
+        })
+    }
+    function handleEmailChange(e) {
+        setEmail(e.target.value)
+        onUpdate({
+            fullName,
+            email: e.target.value,
+            phoneNumber
+        })
+    }
+    function handlePhoneChange(e) {
+        setTelNumber(e.target.value)
+        onUpdate({
+            fullName,
+            email,
+            phoneNumber: e.target.value
+        })
     }
     function handleEdit(e) {
         e.preventDefault();
@@ -26,11 +65,10 @@ export default function PersonalDetailsForm() {
             display: showForm ? 'block' : 'none',
         }}>
             <h2>PERSONAL DETAILS</h2>
-            <Input onChange={(e) => setName(e.target.value)} label="FULL NAME: " />
-            <Input onChange={(e) => setEmail(e.target.value)} label="EMAIL: " />
-            <Input onChange={(e) => setTelNumber(e.target.value)} label="TEL NO:" />
+            <Input onChange={handleNameChange} label="FULL NAME: " value={name}/>
+            <Input onChange={handleEmailChange} label="EMAIL: " value={userEmail}/>
+            <Input onChange={handlePhoneChange} label="TEL NO:" value={telNumber}/>
             <div className="btn">
-            <Button onClick={handleClick} label ="Save"/>
             </div>
         </form>
         <section style={{
@@ -41,7 +79,7 @@ export default function PersonalDetailsForm() {
             }}>
                 <h2>PERSONAL DETAILS</h2>
                 <p>Name: {name}</p>
-                <p>Email: {email}</p>
+                <p>Email: {userEmail}</p>
                 <p>Tel no: {telNumber}</p>
 
                 <div className="btn">

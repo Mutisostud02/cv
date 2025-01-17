@@ -1,28 +1,43 @@
 import Input from "./input"
 import { Textarea } from "./input"
 import Button from "./button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export default function WorkExpForm() {
+export default function WorkExpForm({
+    companyName,
+    workJobTitle,
+    yearsWorkedPeriod,
+    workResponsibilities,
+    onUpdate,
+    work
+
+}) {
      const [showForm, setShowForm] = useState(true)
-     const [workName, setWorkName] = useState('');
-     const [jobTitle, setJobTitle] = useState('');
-     const [responsibilities, setResponsibilities] = useState([]);
+     const [workName, setWorkName] = useState(companyName);
+     const [jobTitle, setJobTitle] = useState(workJobTitle);
+     const [yearsWorked, setYearsWorked] = useState(yearsWorkedPeriod)
+     const [responsibilities, setResponsibilities] = useState(workResponsibilities || []);
 
-     //state to take multiple objects containing different workexperiences
-     const [history, setHistory] = useState([])
-    
+        useEffect(() => {
+            setWorkName(companyName)
+            setJobTitle(workJobTitle)
+            setYearsWorked(yearsWorkedPeriod)
+            setResponsibilities(workResponsibilities || [])
+        }, [companyName, workJobTitle, yearsWorkedPeriod, workResponsibilities])
+
+        const updatedDetails = {
+            companyName: workName,
+            workJobTitle: jobTitle,
+            yearsWorkedPeriod: yearsWorked,
+            workResponsibilities: responsibilities
+        }
+        
+
         function handleClick(e) {
             e.preventDefault();
             e.stopPropagation();
             setShowForm(false)
-            setHistory([...history, {
-                ["Work Name"]: workName,
-                ["Job Title"]: jobTitle,
-                Responsibilities: responsibilities,
-                
-            }])
-            
+            onUpdate(updatedDetails)            
         }
         function handleEdit(e) {
             e.preventDefault();
@@ -33,8 +48,9 @@ export default function WorkExpForm() {
             e.preventDefault()
             e.stopPropagation()
             setShowForm(true)
-            setWorkName('');
+            setWorkName('')
             setJobTitle('')
+            setYearsWorked('')
             setResponsibilities([])          
         }
         function handleBack(e) {
@@ -50,12 +66,14 @@ export default function WorkExpForm() {
             <h2>WORK EXPERIENCE</h2>
             <Input onChange={(e) => setWorkName(e.target.value)} label="COMPANY NAME: " value={workName}/>
             <Input onChange={(e) => setJobTitle(e.target.value)} label="WORK TITLE: " value={jobTitle}/>
+            <Input onChange={(e) => setYearsWorked(e.target.value)} value={yearsWorked} label="YEAR FROM/TO"  />            
             <Textarea onChange={(e) => setResponsibilities(e.target.value.split('\n'))} label="Responsibilities" value={responsibilities.join('\n')}/>
             <div className="btns">
             <Button onClick={handleClick} label ="Save"/>
-            {history.length > 0 && <Button onClick={handleBack} label="back"/>}            
+            {work.length > 0 && <Button onClick={handleBack} label="back"/>}            
             </div>
         </form>
+        
         <section style={{
         
             maxWidth:"100%",
@@ -63,13 +81,14 @@ export default function WorkExpForm() {
             backgroundColor: 'rgb(53, 53, 109)',          
             }}>
                 <h2>WORK EXPERIENCE</h2>
-                {history.map((item, index) => (
+                {work.map((item, index) => (
                     <div key={index}>
                     {index < 1 && <hr/>}
-                    <p>Work Name: {item["Work Name"]}</p>
-                    <p>Job Title: {item["Job Title"]}</p>
+                    <p>Work Name: {item.companyName}</p>
+                    <p>Job Title: {item.jobWorkTitle}</p>
+                    <p>Period From/To: {item.yearsWorkedPeriod}</p>
                     <h4 style={{fontSize:'1.2rem'}}>Responsibilities: </h4>
-                    {item.Responsibilities.map((itm, ind) => (
+                    {item.workResponsibilities.map((itm, ind) => (
                         <div key={ind}>
                             <p>{itm}</p>                            
                         </div>

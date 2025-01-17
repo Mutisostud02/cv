@@ -45,20 +45,32 @@ h1 {
   color: rgb(255, 255, 255);
   text-align: center;
 }
-.content-box {
-  display: flex;
-  gap:1rem;
+
+.display{
+  display:flex;  
+  gap:2rem;
 }
-aside{
-  background-color: rgb(213, 233, 233);
-  flex-grow: 1;
-  height:100dvh;
-  padding: 0.2rem;
+.formIn {
+  flex:1;
 }
-main {
-  flex-grow: 15;
-  height:100dvh;
-  background-color: beige;
+.formOut {
+  background-color: aliceblue;
+  flex:7;
+  width: 210mm;          
+  height: 297mm;        
+  margin: 0 auto;       
+  padding: 20mm;         
+  box-sizing: border-box; 
+  background-color: rgb(209, 204, 204);
+  border: 1px solid #000; 
+  overflow: hidden;    
+}
+.personal {
+  text-align: center;
+}
+.personal p:first-child{
+  color: rgb(0, 255, 98);
+  font-size: 2.3rem;
 }
 form {
   flex:1;

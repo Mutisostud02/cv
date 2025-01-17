@@ -1,13 +1,30 @@
 import Input from "./input"
 import Button from "./button"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function EducationForm() {
+export default function EducationForm({
+    schoolName,
+    levelStudiedFor,
+    durationPeriod,
+    onUpdate,
+    education
+}) {
     const [showForm, setShowForm] = useState(true)
-    const [school, setSchool] = useState('');
-    const [studied, setStudied] = useState('');
-    const [duration, setDuration] = useState('');
-    const [history, setHistory] = useState([]);
+    const [school, setSchool] = useState(schoolName);
+    const [studied, setStudied] = useState(levelStudiedFor);
+    const [duration, setDuration] = useState(durationPeriod);
+
+    const updatedDetails = {
+        schoolName: school,
+        levelStudiedFor: studied,
+        durationPeriod: duration
+    }
+
+    useEffect(() => {
+        setSchool(schoolName)
+        setStudied(levelStudiedFor),
+        setDuration(durationPeriod)
+    }, [schoolName, levelStudiedFor, durationPeriod])
 
 
     
@@ -15,14 +32,11 @@ export default function EducationForm() {
             e.preventDefault();
             e.stopPropagation();
             setShowForm(false);
-            setHistory([...history, {
-                name: school,
-                studied: studied,
-                duration: duration
-            }])
+            onUpdate(updatedDetails)
             
         }
-        //function to edit individual items in the history array
+      
+        //function to edit individual items in the education array
         function handleEdit(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -52,7 +66,7 @@ export default function EducationForm() {
             <Input onChange={(e) => setDuration(e.target.value)} value={duration} label="YEAR FROM/TO"  />
             <div className="btns">
             <Button onClick={handleClick} label ="Save"/>
-            {history.length > 0 && <Button onClick={handleBack} label="back"/>}            
+            {education.length > 0 && <Button onClick={handleBack} label="back"/>}            
             </div>
         </form>
         <section style={{
@@ -63,11 +77,11 @@ export default function EducationForm() {
             margin:'0.4rem 0'          
             }}>
                 <h2>EDUCATION DETAILS</h2>
-                {history.map((item, index) => (
+                {education.map((item, index) => (
                 <div key={index}>
-                <p>School: {item.name}</p>
-                <p>Studied: {item.studied}</p>
-                <p>Duration: ({item.duration})</p>
+                <p>School: {item.schoolName}</p>
+                <p>Studied: {item.levelStudiedFor}</p>
+                <p>Duration: ({item.durationPeriod})</p>
                 <Button onClick label="edit"/>
                 </div>
                 ))}

@@ -16,11 +16,13 @@ export default function MainForm() {
         phoneNumber: "0734323444"
     })
     const [education, setEducation] = useState([{
+        id: crypto.randomUUID(),
         schoolName: 'Example University',
         levelStudiedFor: "Bachelor's in Software Engineering",
         durationPeriod: '2014-2018'
     }])
     const [work, setWork] = useState([{
+        id: crypto.randomUUID(),
         companyName: 'XYZ Solutions',
         workJobTitle: 'Junior Developer',
         yearsWorkedPeriod: '2018 - 2020',
@@ -34,11 +36,43 @@ export default function MainForm() {
         setPersonal(updateDetails)
     }
     
-    function handleEducationChange(updateDetails) {
-        setEducation([...education, updateDetails])
+    function handleEducationChange(updatedDetails) {
+        setEducation(prevEducation => {
+            if (Array.isArray(updatedDetails)) {
+                // If the update is an entire array, directly replace the education state
+                return updatedDetails;
+            }
+    
+            // Otherwise, handle updating individual items
+            const updatedEducation = prevEducation.map(item => {
+                // Find the item by id and replace it with updatedDetails
+                if (item.id === updatedDetails.id) {
+                    return updatedDetails;
+                }
+                return item;  // Keep the other items unchanged
+            });
+    
+            return updatedEducation;
+        });
     }
-    function handleWorkInputChange(updateDetails) {
-        setWork([...work, updateDetails])
+    function handleWorkInputChange(updatedDetails) {
+        setWork(prevWork => {
+            if (Array.isArray(updatedDetails)) {
+                // If the update is an entire array, directly replace the education state
+                return updatedDetails;
+            }
+    
+            // Otherwise, handle updating individual items
+            const updatedWork = prevWork.map(item => {
+                // Find the item by id and replace it with updatedDetails
+                if (item.id === updatedDetails.id) {
+                    return updatedDetails;
+                }
+                return item;  // Keep the other items unchanged
+            });
+    
+            return updatedWork;
+        });
     }
 
     return (
@@ -51,17 +85,17 @@ export default function MainForm() {
     onUpdate={handlePersonalDetailsChange}
     />
     <EducationForm
-    schoolName={education[0].schoolName}
-    levelStudiedFor={education[0].levelStudiedFor}
-    durationPeriod={education[0].durationPeriod}
+    schoolName={education[0]?.schoolName || ""}
+    levelStudiedFor={education[0]?.levelStudiedFor || ""}
+    durationPeriod={education[0]?.durationPeriod || ""}
     onUpdate={handleEducationChange}
     education={education}
     />
     <WorkExpForm
-    companyName={work[0].companyName}
-    workJobTitle={work[0].workJobTitle}
-    yearsWorkedPeriod={work[0].yearsWorkedPeriod}
-    workResponsibilities={work[0].workResponsibilities}
+    companyName={work[0]?.companyName || ""}
+    workJobTitle={work[0]?.workJobTitle || ""}
+    yearsWorkedPeriod={work[0]?.yearsWorkedPeriod || ""}
+    workResponsibilities={work[0]?.workResponsibilities || []}
     onUpdate={handleWorkInputChange}
     work={work}
     />
@@ -84,8 +118,8 @@ export default function MainForm() {
                 gridTemplateColumns:"repeat(3, 1fr)"
             }}>
             
-            {education.map((item, index) => 
-            <div key={index} style={
+            {education.map((item) => 
+            <div key={item.id} style={
                 {
                     lineHeight:2
                 }

@@ -19,44 +19,70 @@ export default function WorkExpForm({
      const [responsibilities, setResponsibilities] = useState(workResponsibilities || []);
 
         useEffect(() => {
+            if(showForm) {
             setWorkName(companyName)
             setJobTitle(workJobTitle)
             setYearsWorked(yearsWorkedPeriod)
             setResponsibilities(workResponsibilities || [])
-        }, [companyName, workJobTitle, yearsWorkedPeriod, workResponsibilities])
+        }}, [companyName, workJobTitle, yearsWorkedPeriod, workResponsibilities, showForm])
 
-        const updatedDetails = {
-            companyName: workName,
-            workJobTitle: jobTitle,
-            yearsWorkedPeriod: yearsWorked,
-            workResponsibilities: responsibilities
-        }
         
-
         function handleClick(e) {
             e.preventDefault();
             e.stopPropagation();
             setShowForm(false)
-            onUpdate(updatedDetails)            
+            if (!workName || !jobTitle || !yearsWorked) {
+                // Prevent saving if any value is empty
+                alert("Please fill in all fields before saving.");
+                return;
+            }
+            const updatedDetails = {
+                companyName: workName,
+                workJobTitle: jobTitle,
+                yearsWorkedPeriod: yearsWorked,
+                workResponsibilities: responsibilities,
+                id: work[work.length - 1]?.id, // Ensure the id remains unchanged for new item
+            };
+            onUpdate([...work.slice(0, work.length - 1), updatedDetails]); // Update last item only
+            onUpdate(updatedDetails)              
         }
-        function handleEdit(e) {
+        function handleEdit(e, item) {
             e.preventDefault();
             e.stopPropagation();
+            setWorkName(item.companyName)
+            setJobTitle(item.workJobTitle)
+            setYearsWorked(item.yearsWorkedPeriod)
+            setResponsibilities(item.workResponsibilities)
             setShowForm(true)
+
         }
         function handleAdd(e) {
             e.preventDefault()
             e.stopPropagation()
+            const newItem = {
+                companyName: "",
+                workJobTitle: "",
+                yearsWorkedPeriod: "",
+                workResponsibilities: [],
+                id: crypto.randomUUID(),
+            }
+            setWorkName("")
+            setJobTitle("")
+            setYearsWorked("")
+            setResponsibilities([])
             setShowForm(true)
-            setWorkName('')
-            setJobTitle('')
-            setYearsWorked('')
-            setResponsibilities([])          
+            onUpdate([...work, newItem])         
         }
         function handleBack(e) {
             e.preventDefault()            
             e.stopPropagation()
             setShowForm(false)
+        }
+        function handleDelete(e, item) {
+            e.stopPropagation()
+            e.preventDefault()
+            onUpdate(work.filter(i => i.id !== item.id));
+           
         }
     return (
         <>
@@ -82,8 +108,8 @@ export default function WorkExpForm({
             }}>
                 <h2>WORK EXPERIENCE</h2>
                 {work.map((item, index) => (
-                    <div key={index}>
-                    {index < 1 && <hr/>}
+                    <div key={item.id}>
+                    {index > 0 && <hr/>}
                     <p>Work Name: {item.companyName}</p>
                     <p>Job Title: {item.jobWorkTitle}</p>
                     <p>Period From/To: {item.yearsWorkedPeriod}</p>
@@ -95,7 +121,8 @@ export default function WorkExpForm({
                     ))}
                     
                     {/* Onclick to be set on handleEdit function */}
-                    <Button onClick={() => {}} label="edit"/>
+                    <Button onClick={(e) => {handleEdit(e, item)}} label="edit"/>
+                    <Button onClick={(e) => {handleDelete(e, item)}} label="delete"/>
                     <hr/>
                     </div>
                 ))}
